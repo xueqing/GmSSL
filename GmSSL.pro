@@ -1,3 +1,23 @@
+INCLUDEPATH += \
+    apps/ \
+    crypto/ \
+    crypto/evp/ \
+    crypto/include/ \
+    crypto/include/internal/ \
+    engines/ \
+    fuzz/ \
+    include/ \
+    include/internal \
+    include/openssl \
+#    java \
+    ms/ \
+    os-dep/ \
+#    php \
+    ssl/ \
+    test/ \
+    util/ \
+    VMS
+
 DISTFILES += \
     external/perl/Text-Template-1.46/META.json \
     libcrypto.a \
