@@ -546,11 +546,11 @@ int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 
 int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *c, int keylen)
 {
-    if (c->cipher->flags & EVP_CIPH_CUSTOM_KEY_LENGTH)
+    if (c->cipher && (c->cipher->flags & EVP_CIPH_CUSTOM_KEY_LENGTH))
         return EVP_CIPHER_CTX_ctrl(c, EVP_CTRL_SET_KEY_LENGTH, keylen, NULL);
     if (c->key_len == keylen)
         return 1;
-    if ((keylen > 0) && (c->cipher->flags & EVP_CIPH_VARIABLE_LENGTH)) {
+    if ((keylen > 0) && (!c->cipher || (c->cipher->flags & EVP_CIPH_VARIABLE_LENGTH))) {
         c->key_len = keylen;
         return 1;
     }
@@ -591,7 +591,7 @@ int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr)
 
 int EVP_CIPHER_CTX_rand_key(EVP_CIPHER_CTX *ctx, unsigned char *key)
 {
-    if (ctx->cipher->flags & EVP_CIPH_RAND_KEY)
+    if (ctx->cipher && (ctx->cipher->flags & EVP_CIPH_RAND_KEY))
         return EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_RAND_KEY, 0, key);
     if (RAND_bytes(key, ctx->key_len) <= 0)
         return 0;
